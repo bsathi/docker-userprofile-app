@@ -1,70 +1,53 @@
-## demo app - developing with Docker
+Dockerized Node.js User Profile Application
 
-This demo app shows a simple user profile app set up using 
-- index.html with pure js and css styles
-- nodejs backend with express module
-- mongodb for data storage
+This project is a full-stack containerized application consisting of a Node.js frontend/backend, a MongoDB database, and a Mongo-Express administrative UI.
 
-All components are docker-based
+A System Architecture
+The application runs as a multi-container stack within a dedicated Docker network (mongo-network), ensuring seamless communication between services using container hostnames.
 
-### With Docker
+B Tech Stack & Container Images
+The following verified versions are used to ensure hardware compatibility (specifically addressing AVX requirements) and stability:
+* Node.js: 18-alpine (LTS version)
+* MongoDB: 4.4 (Compatible with non-AVX CPUs)
+* Mongo-Express: latest
 
-#### To start the application
+C Local Development Setup
 
-Step 1: Create docker network
+Before containerizing, you can run the app directly on your host machine.
 
-    docker network create mongo-network 
+Step 1. PowerShell Script Fix on Windows
+If you encounter a "scripts are disabled" error when running npm, follow these steps to update your execution policy:
+	a. Open PowerShell as Administrator.
+	b. Execute the following command:
+	PowerShell
+	Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+	c. Type 'A' (Yes to All) and press Enter.
 
-Step 2: start mongodb 
+Step 2. Local Installation
+Navigate to the app/ folder and install dependencies:
 
-    docker run -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --name mongodb --net mongo-network mongo    
+	cd app
+	npm install
+	node server.js
 
-Step 3: start mongo-express
-    
-    docker run -d -p 8081:8081 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=password --net mongo-network --name mongo-express -e ME_CONFIG_MONGODB_SERVER=mongodb mongo-express   
+Step 3. Docker Deployment
+To launch the entire stack using Docker Compose, navigate to the root directory and run:
 
-_NOTE: creating docker-network in optional. You can start both containers in a default network. In this case, just emit `--net` flag in `docker run` command_
+	docker-compose up -d
+Access Points
+	Service			URL
+	Node.js App		http://localhost:3000
+	Mongo-Express UI	http://localhost:8081
 
-Step 4: open mongo-express from browser
+Step 4. Data Persistence
+Persistent data is stored in a Docker named volume.
+* Volume Name: mongo-data
 
-    http://localhost:8081
+Step 5. Maintenance Commands
+	* Rebuild Image: docker build -t my-app:1.0 .
+	* Check Logs: docker logs my-app
+	* Remove Stack: docker-compose down
 
-Step 5: create `user-account` _db_ and `users` _collection_ in mongo-express
+Fix PowerShell Execution Policy for npm (https://www.youtube.com/watch?v=6vdQi_BK-uM)
+This video provides a direct walkthrough of identifying and resolving PowerShell permission errors, ensuring your Node.js environment is correctly configured for local development.
 
-Step 6: Start your nodejs application locally - go to `app` directory of project 
-
-    npm install 
-    node server.js
-    
-Step 7: Access you nodejs application UI from browser
-
-    http://localhost:3000
-
-### With Docker Compose
-
-#### To start the application
-
-Step 1: start mongodb and mongo-express
-
-    docker-compose -f docker-compose.yaml up
-    
-_You can access the mongo-express under localhost:8080 from your browser_
-    
-Step 2: in mongo-express UI - create a new database "my-db"
-
-Step 3: in mongo-express UI - create a new collection "users" in the database "my-db"       
-    
-Step 4: start node server 
-
-    npm install
-    node server.js
-    
-Step 5: access the nodejs application from browser 
-
-    http://localhost:3000
-
-#### To build a docker image from the application
-
-    docker build -t my-app:1.0 .       
-    
-The dot "." at the end of the command denotes location of the Dockerfile.
