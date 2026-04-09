@@ -40,13 +40,17 @@ To launch the entire stack using Docker Compose, navigate to the root directory 
 	Node.js App		    http://localhost:3000
 	Mongo-Express UI	http://localhost:8081
 
+Note: when you access Mongo-Express UI first time on local or on aws ec2-instance, you will get a Browser Base64 authentication 
+    use admin/pass credentials to launch mongo-express UI.
 #### Step 4. Data Persistence
 Persistent data is stored in a Docker named volume.
 * Volume Name: mongo-data
 
 #### Step 5. Maintenance Commands
-	* Rebuild Image: docker build -t my-app:1.0 .
-	* Check Logs: docker logs my-app
+	* When my-app (Node App) is updated, need to rebuild the customer image: 
+        docker build -t my-app:1.x .
+        docker-compose up -d
+	* Check Logs: docker logs my-app:1.x
 	* Remove Stack: docker-compose down
 
 Fix PowerShell Execution Policy for npm (https://www.youtube.com/watch?v=6vdQi_BK-uM)

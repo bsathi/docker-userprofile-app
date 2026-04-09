@@ -43,7 +43,9 @@
 </style>
 <script>
     (async function init() {
-        const response = await fetch('http://localhost:3000/get-profile');
+//        const response = await fetch('http://localhost:3000/get-profile');
+// made the fetch URL relative so that it works both in local and aws/docker environments without needing code changes
+        const response = await fetch('/get-profile');
         console.log("response", response);
         const user = await response.json();
         console.log(JSON.stringify(user));
@@ -66,7 +68,9 @@
             interests: document.getElementById('input-interests').value
         };
         
-        const response = await fetch('http://localhost:3000/update-profile', {
+ //       const response = await fetch('http://localhost:3000/update-profile', {
+ // made the fetch URL relative so that it works both in local and aws/docker environments without needing code changes
+        const response = await fetch('/update-profile', {
             method: "POST",
             headers: {
               'Accept': 'application/json',
