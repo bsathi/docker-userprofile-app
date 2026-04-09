@@ -1,6 +1,6 @@
 ## Setup Guide
 Local to GitHub Repository Setup Guide
-This document outlines the steps taken to initialize a local Dockerized Node.js project on VS-Code IDE and push it to a remote GitHub repository from VS Code-Power Shell.
+This document outlines the steps taken to initialize a local Dockerized Node.js project on VS-Code IDE and push it to a remote GitHub repository from VS Code-Power Shellgit .
 
 Prerequisites
 Git installed on the local machine.

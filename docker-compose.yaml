@@ -1,11 +1,13 @@
-version: '3'
+version: '4'
 services:
   my-app:
-    image: my-app:1.0
+    image: my-app:1.1 # updated user profile image and name/email in index.html & server.js
     ports:
       - 3000:3000
     environment:
       - DOCKER_ENV=true  # This triggers the 'mongoUrlDocker' logic in my-app/server.js
+    networks:
+      - mongo-network
     depends_on:
       - mongodb
 
@@ -16,6 +18,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - mongo-network
     volumes:
       - mongo-data:/data/db
   mongo-express:
@@ -27,8 +31,14 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
       - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - mongo-network
     depends_on:
       - mongodb
+
+networks:
+  mongo-network:      # Defining the network driver for the stack
+    driver: bridge
 
 volumes:
   mongo-data:
